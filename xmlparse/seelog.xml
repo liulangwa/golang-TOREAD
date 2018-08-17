@@ -1,0 +1,14 @@
+<seelog>
+    <outputs formatid="LL">
+        <!--日志的级别 现阶段三个级别 info debug error-->
+        <filter levels="info,warn,error">
+            <console/>
+            <!--filename 默认是当前目录 可修改 格式如: D:/log/autogatesrv.log-->
+            <!--maxsize 每个log文件的大小 默认1000000字节 maxrolls最多打印30个log文件 回滚 自动删除旧日志-->
+            <rollingfile type="size" filename="./log/LL.log" maxsize="5000000" maxrolls="30"/>
+        </filter>
+    </outputs>
+    <formats>
+        <format id="LL" format="%Date/%Time [%LEV] %Msg%n"/>
+    </formats>
+</seelog>
