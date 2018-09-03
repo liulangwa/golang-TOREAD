@@ -19,7 +19,7 @@ var (
 
 func doCall() {
 
-	fmt.Println(" ")
+	fmt.Println("_")
 }
 
 func main() {
