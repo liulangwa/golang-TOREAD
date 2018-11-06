@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>websocket测试程序 </title>
+    <script>
+        window.addEventListener("load", function (evt) {
+            var output = document.getElementById("output");
+            var input = document.getElementById("input")
+            var ws;
+            var print = function (message) {
+                var d = document.createElement("div");
+                d.innerHTML = message;
+                output.appendChild(d);
+            };
+
+            document.getElementById("open").onclick = function (ev) {
+                if (ws) {
+                    return false;
+                }
+                ws = new WebSocket("ws://localhost:8888/ws");
+                ws.onopen = function (ev) {
+                    print("连接成功");
+                };
+                ws.onclose = function (ev) {
+                    print("连接关闭");
+                };
+                ws.onerror = function (ev) {
+                    print("发生错误 " + ev.data)
+                };
+
+                ws.onmessage = function (ev1) {
+                    print("服务端消息: " + ev1.data)
+                };
+
+                return false
+            };
+
+            document.getElementById("send").onclick = function (ev) {
+                if (!ws) {
+
+                    return false
+                }
+
+
+                if (input.value !== "") {
+                    ws.send(input.value)
+                } else {
+                    print("发送内容不能为空")
+                }
+
+
+            };
+
+            document.getElementById("close").onclick = function (ev) {
+                if (ws) {
+                    ws.close()
+                }
+            }
+
+        })
+
+    </script>
+</head>
+<body>
+
+<div>
+
+    <br>
+    websocket测试程序，消息又客户端发送到server然后原封不动的返回，server使用go实现
+    <br>
+    <br>
+    <br>
+    <input type="button" value="连接" id="open">
+    <input placeholder="输入要发送的消息..." id="input">
+    <input type="button" value="发送" id="send">
+    <input type="button" value="关闭" id="close">
+
+</div>
+<div id="output">
+
+</div>
+
+</body>
+</html>
