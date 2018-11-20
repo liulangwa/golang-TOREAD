@@ -1,3 +1,12 @@
+/*
+etcdctl存的数据，使用clientv3API也访问不到。etcdctl默认是使用v2 版本，所有在执行命令前需要设置环境变量，export ETCDCTL_API=3
+v2和v3 不在一个存储区，两者之间是数据隔离的
+
+$env:ETCDCTL_API=3
+
+
+*/
+
 package main
 
 import (
@@ -20,8 +29,8 @@ func main() {
 	}
 	defer cli.Close()
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*2)
-	respPut, err := cli.Put(ctx, "test_key", "tt_value") //设置
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	respPut, err := cli.Put(ctx, "test_key", "etcd存储的值") //设置
 	cancel()
 
 	if err != nil {
@@ -43,7 +52,7 @@ func main() {
 
 	// use the response
 
-	ctx, cancel = context.WithTimeout(context.Background(), time.Second*2)
+	ctx, cancel = context.WithTimeout(context.Background(), time.Second*5)
 	respGet, err := cli.Get(ctx, "test_key") //获取etcd中内容，单次查询
 	cancel()
 	if err != nil {
@@ -60,6 +69,6 @@ func main() {
 	}
 
 	for k, v := range respGet.Kvs {
-		fmt.Printf("key:%v value:%v\n", k, v)
+		fmt.Printf("index:%v key:%v value:%v\n", k, string(v.Key), string(v.Value))
 	}
 }
